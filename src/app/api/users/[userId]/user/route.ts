@@ -1,6 +1,5 @@
 import { validateRequest } from "@/lib/auth";
 import db from "@/lib/prisma";
-import { getUserDataSelect } from "../followers/types";
 
 export async function GET(
   req: Request,
