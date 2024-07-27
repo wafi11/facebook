@@ -1,13 +1,13 @@
 import { createServer } from "node:http";
 import next from "next";
 import { Server as SocketIOServer, Socket } from "socket.io";
-const dev = process.env.NODE_ENV !== "production";
-const hostname = "localhost";
 import crypto from "crypto";
-const port = 3000;
-const app = next({ dev, hostname, port });
-const handler = app.getRequestHandler();
 import { PrismaClient } from '@prisma/client'
+const dev = process.env.NODE_ENV !== "production";
+const port = process.env.PORT || 3000
+const localhost = process.env.LOCALHOST
+const app = next({ dev,localhost,port});
+const handler = app.getRequestHandler();
 
 const prisma = new PrismaClient()
 app.prepare().then(() => {
@@ -27,7 +27,7 @@ app.prepare().then(() => {
     socket.on("sendMessage", async (message) => {
       console.log(message);
       const { content, receiverId, senderId } = message;
-
+1
       if (!receiverId || !senderId) {
         throw new Error("Internal Server Error");
       }
@@ -64,8 +64,8 @@ app.prepare().then(() => {
     console.error("HTTP server error:", err);
     process.exit(1);
   });
-
+  
   httpServer.listen(port, () => {
-    console.log(`Server is running at http://${hostname}:${port}`);
+    console.log(`Server is running at ${localhost}:${port}`);
   });
 });
