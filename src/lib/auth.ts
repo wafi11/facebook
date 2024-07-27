@@ -3,7 +3,6 @@ import db from "./prisma";
 import { Lucia, Session, User } from "lucia";
 import { cache } from "react";
 import { cookies } from "next/headers";
-import { Google } from "arctic";
 
 declare module "lucia" {
   interface Register {
@@ -21,18 +20,10 @@ interface databaseUserAttributes {
 }
 
 const adapter = new PrismaAdapter(db.session, db.user);
-export const google = new Google(
-  process.env.GOOGLE_CLIENT_ID!,
-  process.env.GOOGLE_CLIENT_SECRET!,
-  `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback/google`
-);
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
     expires: false,
-    attributes: {
-      secure: process.env.NODE_ENV === "production",
-    },
   },
   getUserAttributes(databaseUserAttributes) {
     return {
