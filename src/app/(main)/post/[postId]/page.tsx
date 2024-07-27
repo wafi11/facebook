@@ -10,6 +10,7 @@ import UserToolTip from "@/components/ui/UserToltip";
 import { validateRequest } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { Loader2 } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache, Suspense } from "react";
@@ -30,14 +31,16 @@ const getData = cache(async (postId: string, userId: string) => {
   return data;
 });
 
-export async function generateMetaData({ params: { postId } }: Iparams) {
+export async function generateMetadata({
+  params: { postId },
+}: Iparams): Promise<Metadata> {
   const { user } = await validateRequest();
 
   if (!user) return {};
-  const data = await getData(postId, user.id);
+  const post = await getData(postId, user.id);
 
   return {
-    title: `${data.user?.displayname} : ${data.content.slice(0, 50)}...`,
+    title: `${post?.user?.displayname}: ${post.content.slice(0, 50)}...`,
   };
 }
 
