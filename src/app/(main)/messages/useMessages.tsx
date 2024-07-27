@@ -1,5 +1,4 @@
 "use server";
-import { getDirectMessages } from "@/app/data/user";
 import { validateRequest } from "@/lib/auth";
 import db from "@/lib/prisma";
 

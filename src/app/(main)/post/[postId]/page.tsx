@@ -30,7 +30,7 @@ const getData = cache(async (postId: string, userId: string) => {
   return data;
 });
 
-async function generateMetaData({ params: { postId } }: Iparams) {
+export async function generateMetaData({ params: { postId } }: Iparams) {
   const { user } = await validateRequest();
 
   if (!user) return {};
