@@ -5,7 +5,7 @@ import crypto from "crypto";
 import pkg from 'pg';
 const { Pool } = pkg;
 
-const dev = process.env.NODE_ENV === "production";
+const dev = process.env.NODE_ENV !== "production";
 const port = process.env.PORT || 3000;
 const localhost = process.env.LOCALHOST;
 const app = next({ dev, localhost, port });
