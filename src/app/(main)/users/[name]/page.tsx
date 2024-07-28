@@ -14,6 +14,7 @@ import { formatDate } from "date-fns";
 import React, { cache } from "react";
 import UserPosts from "./UserPosts";
 import EditProfileButton from "./EditProfileButton";
+import db from "@/lib/prisma";
 
 interface PageProps {
   user: UserData;
@@ -27,7 +28,7 @@ interface Props {
 }
 
 const getUser = cache(async (name: string, loggedUserId: string) => {
-  const user = await prisma?.user.findFirst({
+  const user = await db.user.findFirst({
     where: {
       name: {
         equals: name,

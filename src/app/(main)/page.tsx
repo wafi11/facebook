@@ -1,10 +1,7 @@
 import TrendsSidebar from "@/components/sidebar/TrendsSIdebar";
-import { postDataInclude } from "@/lib/types";
 import { Metadata } from "next";
-import prisma from "@/lib/prisma";
 import ForYoufeed from "./ForYoufeed";
 import PostEditor from "@/components/posts/editor/PostEditor";
-import { validateRequest } from "@/lib/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FollowingPage from "./FollowingFeed";
 
