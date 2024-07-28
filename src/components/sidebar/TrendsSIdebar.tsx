@@ -1,16 +1,14 @@
 import { validateRequest } from "@/lib/auth";
-import { UserDataSelect } from "@/lib/types";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import React, { Suspense } from "react";
 import UserProfile from "../ui/userImage";
-import { Button } from "../ui/button";
 import { unstable_cache } from "next/cache";
 import db from "@/lib/prisma";
 import { formatNumber } from "@/lib/utils";
 import ButtonFollow from "../ui/ButtonFollow";
 import { getUserDataSelect } from "@/app/api/users/[userId]/followers/types";
-// sticky top-[5.25rem] bg-gray-200 dark:bg-neutral-900 h-fit hidden space-y-3 rounded-2xl flex-none  px-3  py-4 shadow-sm xl:w-80 sm:block
+
 const TrendsSidebar = () => {
   return (
     <div className="sticky top-[5.25rem] h-fit hidden space-y-3 flex-none  px-3 lg:px-5   xl:w-80 sm:block ">
@@ -28,7 +26,7 @@ async function WhoToFollow() {
   const { user } = await validateRequest();
 
   if (!user) return null;
-  const userToFollow = await prisma?.user.findMany({
+  const userToFollow = await db.user.findMany({
     where: {
       NOT: {
         id: user?.id,

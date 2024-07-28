@@ -1,6 +1,7 @@
 "use server";
 import { getPostDataInclude } from "@/app/api/users/[userId]/followers/types";
 import { validateRequest } from "@/lib/auth";
+import db from "@/lib/prisma";
 import { createPostsSchema } from "@/lib/vaidationSchema";
 
 export async function submitPost(input: {
@@ -13,7 +14,7 @@ export async function submitPost(input: {
 
   const { content, mediaIds } = createPostsSchema.parse(input);
 
-  const newPost = await prisma?.post.create({
+  const newPost = await db.post.create({
     data: {
       content,
       userId: user.id,
