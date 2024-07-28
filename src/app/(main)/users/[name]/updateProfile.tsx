@@ -11,7 +11,6 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRouter } from "next/navigation";
 import UpdateUser from "./action";
 import { PostsPage } from "@/app/api/posts/for-you/types";

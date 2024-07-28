@@ -21,7 +21,7 @@ import {
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import Image, { StaticImageData } from "next/image";
-import { Camera, FileInput } from "lucide-react"; // Pastikan Anda menginstal lucide-react
+import { Camera, FileInput } from "lucide-react";
 import useProfilePage from "./updateProfile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingButton from "@/components/utils/LodingButtons";

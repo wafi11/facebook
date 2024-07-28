@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-import { lucia } from "./auth";
 export function getUserDataSelect(loggedInUserId: string) {
   return {
     id: true,

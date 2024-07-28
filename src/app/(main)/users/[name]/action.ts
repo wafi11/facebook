@@ -14,15 +14,11 @@ export default async function UpdateUser(values: UpdateUserProfileValues) {
 
   if (!user) throw new Error("Unauthorized");
 
-  const updateUsers = await db.$transaction(async (tx) => {
-    const UpdateUsers = await tx.user.update({
-      where: { id: user.id },
-      data: validataionSchema,
-      select: getUserDataSelect(user.id),
-    });
-
-    return UpdateUsers;
+  const UpdateUsers = await db.user.update({
+    where: { id: user.id },
+    data: validataionSchema,
+    select: getUserDataSelect(user.id),
   });
 
-  return updateUsers;
+  return UpdateUsers;
 }

@@ -31,7 +31,7 @@ export const OurFileRouter = {
       await db.user.update({
         where: { id: metadata.user.id },
         data: {
-          avatarUrl: newAvatarUrl, // Make sure to use newAvatarUrl here
+          avatarUrl: newAvatarUrl,
         },
       });
 

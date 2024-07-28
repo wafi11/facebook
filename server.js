@@ -3,7 +3,7 @@ import next from "next";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import crypto from "crypto";
 import { PrismaClient } from '@prisma/client'
-const dev = process.env.NODE_ENV !== "production";
+const dev = process.env.NODE_ENV === "production";
 const port = process.env.PORT || 3000
 const localhost = process.env.LOCALHOST
 const app = next({ dev,localhost,port});

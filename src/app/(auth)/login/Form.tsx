@@ -29,7 +29,6 @@ const FormLogin = () => {
   });
 
   async function onSubmit(values: LoginSchema) {
-    console.log(values);
     setError(undefined);
     startTranstion(async () => {
       const { error } = await signIn(values);

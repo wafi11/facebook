@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import React from "react";
-import Form from "./Form";
 import Link from "next/link";
 import Image from "next/image";
 import Forms from "./Form";
