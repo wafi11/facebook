@@ -4,5 +4,21 @@
             "path"  : "/api/clear-uploads",
             "schedule" : "0 2 * * *"
         }
-    ]
+    ],
+    "builds": [
+        {
+          "src": "server.js",
+          "use": "@vercel/node"
+        },
+        {
+          "src": "next.config.js",
+          "use": "@vercel/next"
+        }
+      ],
+      "routes": [
+        {
+          "src": "/(.*)",
+          "dest": "/server.js"
+        }
+      ]
 }

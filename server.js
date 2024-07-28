@@ -1,25 +1,19 @@
 import { createServer } from "node:http";
 import next from "next";
-import { Server as SocketIOServer, Socket } from "socket.io";
+import {parse} from "url"
+import { Server as SocketIOServer } from "socket.io";
 import crypto from "crypto";
-import pkg from 'pg';
-const { Pool } = pkg;
-
+import { PrismaClient } from "@prisma/client";
 const dev = process.env.NODE_ENV !== "production";
-const port = process.env.PORT || 3000;
-const localhost = process.env.LOCALHOST;
-const app = next({ dev, localhost, port });
-const handler = app.getRequestHandler();
-const databaseUrl = process.env.DATABASE_URL;
-
-// Buat koneksi pool PostgreSQL
-const pool = new Pool({
-  connectionString: databaseUrl,
-});
+const prisma = new PrismaClient()
+const port = process.env.PORT
+const app = next({ dev });
+const handler= app.getRequestHandler();
 
 app.prepare().then(() => {
   const httpServer = createServer((req, res) => {
-    handler(req, res);
+    const parsedUrl = parse(req.url, true);
+    handler(req, res, parsedUrl);
   });
 
   const io = new SocketIOServer(httpServer, {
@@ -40,23 +34,13 @@ app.prepare().then(() => {
       }
 
       try {
-        // Gunakan pool.query untuk menjalankan query SQL
-        const result = await pool.query(
-          'INSERT INTO direct_messages (content, sender_id, receiver_id) VALUES ($1, $2, $3) RETURNING *',
-          [content, senderId, receiverId]
-        );
-
-        const savedMessage = result.rows[0];
-
-        // Ambil informasi sender dan receiver
-        const senderResult = await pool.query('SELECT * FROM users WHERE id = $1', [senderId]);
-        const receiverResult = await pool.query('SELECT * FROM users WHERE id = $1', [receiverId]);
-
-        const savedMessages = {
-          ...savedMessage,
-          sender: senderResult.rows[0],
-          receiver: receiverResult.rows[0]
-        };
+          await prisma.directMessage.create({
+            data : {
+              content,
+              receiverId,
+              senderId
+            }
+          })
 
         const combinedData = [senderId, receiverId].sort().join("");
         const hash = crypto
@@ -66,7 +50,6 @@ app.prepare().then(() => {
 
         const uniqueKey = `chat:${hash}:message:update`;
         io.emit(uniqueKey, { ...savedMessages });
-
       } catch (error) {
         console.log("Failed to Send Error ", error);
         socket.emit("error", "message failed to send");
@@ -74,12 +57,13 @@ app.prepare().then(() => {
     });
   });
 
-  httpServer.once("error", (err) => {
+  httpServer.once("error", async(err) => {
+    await prisma.$disconnect()
     console.error("HTTP server error:", err);
     process.exit(1);
   });
 
   httpServer.listen(port, () => {
-    console.log(`Server is running at ${localhost}:${port}`);
+    console.log(`> Ready on http://localhost:${port}`);
   });
 });
