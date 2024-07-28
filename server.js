@@ -1,19 +1,21 @@
 import { createServer } from "node:http";
 import next from "next";
+import {parse}  from "url"
 import { Server as SocketIOServer } from "socket.io";
 import crypto from "crypto";
 import { PrismaClient } from "@prisma/client";
 const dev = process.env.NODE_ENV !== "production";
-const localhost = process.env.LOCALHOST
 const prisma = new PrismaClient()
 const port = process.env.PORT
-const app = next({ dev, localhost,port});
+const app = next({ dev});
 const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
   const httpServer = createServer((req, res) => {
-    handler(req, res);
+    const parsedUrl = parse(req.url, true);
+    handler(req, res, parsedUrl);
   });
+
 
   const io = new SocketIOServer(httpServer, {
     cors: {
